@@ -1,0 +1,7 @@
+{
+  "name": "polymertodo",
+  "short_name": "polymertodo",
+  "description": "Aplicação de Todo de exemplo feita com Polymer e Cordova",
+  "start_url": "/",
+  "display": "standalone"
+}
