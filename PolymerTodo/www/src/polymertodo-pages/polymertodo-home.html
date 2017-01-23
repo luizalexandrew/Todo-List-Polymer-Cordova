@@ -1,0 +1,174 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../../bower_components/iron-swipeable-container/iron-swipeable-container.html">
+
+<link rel="import" href="../elements/polymertodo-color.html">
+
+<dom-module id="polymertodo-home">
+    <template>
+        <style is="custom-style">
+            :host{
+                box-sizing: border-box;
+                 align-items: center;
+            }
+            paper-toolbar{
+                background-color: var(--paper-amber-a400);
+            }
+            paper-card{
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .flex-horizontal {
+                @apply(--layout-horizontal);
+            }
+            .flexchild {
+                @apply(--layout-flex);
+            }
+            paper-button[raised]{
+                background-color: var(--paper-amber-a400);
+                color: #FFF;
+            }
+            input[type='submit']{
+                background-color: var(--paper-amber-a400);
+                color: #FFF;
+                border: 0px;
+                width: 50px;
+                height: 50px;
+                margin-left: 10px;
+                border-radius: 50%;
+            }
+            .branco{
+                background-color: #FFF;
+            }
+            .azul{
+                background-color: #03A9F4;
+                color: #FFF;
+            }
+            .verde{
+                background-color: #AEEA00;
+                color: #FFF;
+            }
+            .amarelo{
+                background-color: #FFEB3B;
+            }
+            .laranja{
+                background-color: #FF9800;
+                color: #FFF;
+            }
+            .vermelho{
+                background-color: #F44336;
+                color: #FFF;
+            }
+        </style>
+
+        <paper-toolbar>
+            <paper-icon-button paper-drawer-toggle id="iconeMenu" icon="menu"></paper-icon-button>
+            <span class="title">PolymerTodo</span>
+            <paper-icon-button icon="refresh"></paper-icon-button>
+        </paper-toolbar>
+
+        <paper-card elevation="1" animated-shadow="true" >
+            <div class="card-content">
+                <form class="container flex-horizontal" on-submit="_submit">
+                    <paper-input class="flexchild" label="Todo" id="itemTodo" required></paper-input>
+                    <input type="submit" value="+">
+                </form>
+                <template is="dom-repeat" items="{{todoItens}}">
+                    <paper-item>[[item]]</paper-item>
+                </template>
+                <polymertodo-color color="{{color}}"></polymertodo-color>
+            </div>
+
+            <div class="card-actions">
+                <paper-button on-click="_adicionarTodo" raised>Adicionar</paper-button>
+            </div>
+            
+        </paper-card>
+
+        <app-localstorage-document key="todo" data="{{itensCard}}"></app-localstorage-document>
+        <iron-swipeable-container on-iron-swipe="_delete">
+            <template id="list" is="dom-repeat" items="{{itensCard}}">
+                <paper-card elevation="1" animated-shadow="true" class$="{{item.color}}">
+                    <div class="card-content">                
+
+                        <template is="dom-repeat" items="[[item.itens]]">
+                            <paper-item>[[item]]</paper-item>
+                        </template>
+                    </div>
+
+                </paper-card>
+            </template>
+        </iron-swipeable-container>
+
+    </template>
+    
+    <script>
+        Polymer({
+            is: "polymertodo-home",
+            properties:{
+                todoItens:{
+                    type: Array,
+                    value:[]
+                },
+                color:{
+                    type: String,
+                    value: "branco"
+                },
+                todo:{
+                    type: Object
+                },
+                itensCard:{
+                    type: Object
+                }
+            },
+            _submit: function(){
+                this.push('todoItens', this.$.itemTodo.value);
+                this.$.itemTodo.value = null;
+            },
+            _adicionarTodo: function(){
+                if (this.todoItens.length !== 0) {
+                    this.set('todo', {});
+                    this.set('todo.itens', this.todoItens);
+                    this.set('todo.color', this.color);
+                    console.log(this.todo);
+
+                    if (this.itensCard) {
+                        this.push('itensCard', this.todo);
+                    }else{
+                        this.set('itensCard', []);
+                        this.push('itensCard', this.todo);
+                    }       
+                    this._limpar();
+
+
+                }
+            },
+            _limpar: function(){
+                this.todoItens = [];
+                this.color = "branco";
+
+            },
+            _delete: function(elemento){
+                console.log(elemento);
+
+                const index = this.$.list.indexForElement(elemento.detail.target)
+                const item = this.itensCard[index];
+
+                this.splice('itensCard', index, 1);
+                console.log(this.itensCard);
+            }
+        });
+    </script>
+
+</dom-module>
+
+

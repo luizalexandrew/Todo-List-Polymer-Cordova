@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+
+<dom-module id="polymertodo-color">
+    <template>
+        <style>
+            .item{
+                width: 30px;
+                height: 30px;
+                margin: 5px;
+                border-radius: 50%;
+                float: left;
+            }
+            iron-selector{
+                display: table;
+            }
+            .branco{
+                background-color: #FFF;
+                border: 1px solid #F5F5F5;
+            }
+            .branco::selection{
+                background-color: #000;
+                border: 1px solid #F5F5F5;
+            }
+            .azul{
+                background-color: #03A9F4;
+                border: 2px solid #F5F5F5;
+            }
+            .verde{
+                background-color: #AEEA00;
+                border: 2px solid #F5F5F5;
+            }
+            .amarelo{
+                background-color: #FFEB3B;
+                border: 2px solid #F5F5F5;
+            }
+            .laranja{
+                background-color: #FF9800;
+                border: 2px solid #F5F5F5;
+            }
+            .vermelho{
+                background-color: #F44336;
+                border: 2px solid #F5F5F5;
+            }
+            .iron-selected {
+                border: 4px solid #8BC34A;
+            }
+        </style>
+        <iron-selector attr-for-selected="name" selected="{{color}}">
+            <div class="item branco" name="branco"></div>
+            <div class="item azul" name="azul"></div>
+            <div class="item verde" name="verde"></div>
+            <div class="item amarelo" name="amarelo"></div>
+            <div class="item laranja" name="laranja"></div>
+            <div class="item vermelho" name="vermelho"></div>
+        </iron-selector>
+
+    </template>
+    
+    <script>
+        Polymer({
+            is: "polymertodo-color",
+            properties:{
+                color:{
+                    type: String,
+                    value: "branco",
+                    notify: true
+                }
+            }
+        });
+    </script>
+
+</dom-module>
+
+
